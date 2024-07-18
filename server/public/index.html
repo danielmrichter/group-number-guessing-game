@@ -5,11 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Guess A Number!</title>
-  <script src="scripts/client.js"></script>
+  <script defer src="scripts/client.js"></script>
+  <script src="scripts/axios.js"></script>
   <link rel="stylesheet" href="styles/styles.css">
   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <h1>YOUR GAME HERE!</h1>
+    <h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
+<div id="player1">
+  <h3>Player 1</h3>
+  <input type="number" id="player1Guess" placeholder="Guess Here!">
+  <table>
+    <tbody id="player1History">
+    </tbody>
+  </table>
+
+</div>
+
+<div id="player2">
+  <h3>Player 2</h3>
+  <input type="number" id="player2Guess" placeholder="Guess Here!">
+  <table>
+    <tbody id="player2History">
+    </tbody>
+  </table>
+
+</div>
+
+<div id="winnerText">
+
+</div>
+
+<button onClick="submitGuesses(event)">Submit Guesses!</button>
+<p>Current Round:<span id="roundTracker">1</span></p>
 </body>
 </html>
+
+
+
+<!-- 
+player 1         |          player 2
+input            |              input       
+guess history    |          guess history
+table 
+guess | result
+
+
+            (Winner Display
+                restart) *on game end
+
+                Submit
+            round tracker -->
