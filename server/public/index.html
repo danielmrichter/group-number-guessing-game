@@ -12,6 +12,7 @@
 </head>
 <body>
     <h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
+    <span class="players">
 <div id="player1">
   <h3>Player 1</h3>
   <input type="number" id="player1Guess" placeholder="Guess Here!">
@@ -31,13 +32,15 @@
   </table>
 
 </div>
+</span>
 
 <div id="winnerText">
 
 </div>
-
+<span class="submitArea">
 <button onClick="submitGuesses(event)">Submit Guesses!</button>
 <p>Current Round:<span id="roundTracker">1</span></p>
+</span>
 </body>
 </html>
 
