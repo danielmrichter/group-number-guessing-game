@@ -1,14 +1,22 @@
-function onReady() {
-  console.log("JavaScript is loaded!")
-}
 let roundTracker = 1
-function submitGuesses(event){
+let minNum
+let maxNum
+let robotCheck = false
+function submitGuesses(event) {
   // bundle up data
   let player1Guess = document.getElementById(`player1Guess`).value
   let player2Guess = document.getElementById(`player2Guess`).value
-// data we send from here: guess, who guessed it
+  let winnerText = document.getElementById(`winnerText`)
+  winnerText.innerHTML = ``
+  // data we send from here: guess, who guessed it
+  if (player1Guess === player2Guess) {
+    document.getElementById(`winnerText`).innerHTML = `
+    <h2> Guesses can't be the same!</h2>`
+    return
+  }
   let guessesToSubmit = [
-    { guesser: 1,
+    {
+      guesser: 1,
       number: Number(player1Guess)
     },
     {
@@ -16,102 +24,217 @@ function submitGuesses(event){
       number: Number(player2Guess)
     }
   ]
-  console.log(`guesses to submit:`, guessesToSubmit)
   // make a post req
   axios({
     method: `POST`,
     url: `/guesses`,
     data: guessesToSubmit
-}).then((response) =>{
+  }).then((response) => {
     // then:      
-  // start a get req
-  getResults(response.data)
+    // start a get req
+    getResults(response.data)
     // return the results for each player
-})
-  }
-
-function getResults(guessesArray){
-//   axios({
-//     method: `GET`,
-//     url: `/guesses`
-// }).then((response) =>{
-// make get req
-// const guessesArray = response.data
-// })
+  })
+}
+function getResults(guessesArray) {
   let player1History = document.getElementById(`player1History`)
   let player2History = document.getElementById(`player2History`)
+  let playerComputerHistory = document.getElementById(`playerComputerHistory`)
   let winnerText = document.getElementById('winnerText')
-// return the results for each player
+  // return the results for each player
   let player1Correct = false
   let player2Correct = false
-// if there's a winner, display that text
-// otherwise create history
+  let computerCorrect = false
   player1History.innerHTML = ``
   player2History.innerHTML = ``
-  for(let guess of guessesArray){
-    if(guess.guesser === 1){
-        player1History.innerHTML +=`
+  if(robotCheck){
+    document.getElementById(`playerComputerHistory`).innerHTML = ``
+  }
+  for (let guess of guessesArray) {
+    console.log(guess)
+    if (guess.guesser === 1) {
+      player1History.innerHTML += `
         <tr>
           <td>${guess.number}</td>
           <td>${guess.result}</td>
         </tr>
        `
-       if(guess.result === `Correct`){
-         player1Correct = true
-       }
-      } else{
-       player2History.innerHTML +=
-       `
+      if (guess.result === `Correct`) {
+        player1Correct = true
+      }
+    } else if(guess.guesser === 2) {
+      player2History.innerHTML +=
+        `
         <tr>
           <td>${guess.number}</td>
           <td>${guess.result}</td>
        </tr>
        `
-       if(guess.result === `Correct`){
-          player2Correct = true
-          }
+      if (guess.result === `Correct`) {
+        player2Correct = true
       }
-    }
-    if(player1Correct === true && player2Correct === true){
-      //declare a tie
-      winnerText.innerHTML = `<p>We got a tie!</p>
-      <button onClick="resetGame()">Play Again</button>
+    } else{
+      playerComputerHistory.innerHTML +=
       `
-      return 
+      <tr>
+        <td>${guess.number}</td>
+        <td>${guess.result}</td>
+     </tr>
+     ` 
+      if(guess.result === `Correct`){
+        computerCorrect = true
+     }
     }
-    else if(player1Correct === true){
-      winnerText.innerHTML = `<p>Player 1 Wins!</p>
-      <button onClick="resetGame()">Play Again</button>`
-      return
-    } else if(player2Correct === true){
-      //player 2 wins
-      winnerText.innerHTML = `<p>Player 2 Wins!</p>
-      <button onClick="resetGame()">Play Again</button>`
-      return
-    }
-// advance round tracker
-roundTracker ++
-document.getElementById(`roundTracker`).innerText = roundTracker
-// clear submit fields
+  }
+  if (computerCorrect === true &&(player1Correct === true || player2Correct === true)) {
+    //declare a tie
+    console.log(`computerCorrect is true: `, computerCorrect)
+    winnerText.innerHTML = `<p>We got a tie with the computer!</p>
+      <button onClick="resetGame()">Play Again (Same Settings)</button>
+      <button onClick="toNewGame()">New Game</button>
+      `
+    return
+  }
+  else if (player1Correct === true) {
+    winnerText.innerHTML = `<p>Player 1 Wins!</p>
+      <button onClick="resetGame()">Play Again (Same Settings)</button>
+      <button onClick="toNewGame()">New Game</button>`
+    return
+  } else if (player2Correct === true) {
+    //player 2 wins
+    winnerText.innerHTML = `<p>Player 2 Wins!</p>
+      <button onClick="resetGame()">Play Again(Same Settings)</button>
+      <button onClick="toNewGame()">New Game</button>`
+    return
+  } else if (computerCorrect === true){
+    winnerText.innerHTML = `<p>You lost to the Computer! 🤖🤖🤖 </p>
+    <p>Now that's just embarassing...</p>
+      <button onClick="resetGame()">Play Again(Same Settings)</button>
+      <button onClick="toNewGame()">New Game</button>`
+  }
+  // advance round tracker
+  roundTracker++
+  document.getElementById(`roundTracker`).innerText = roundTracker
+  // clear submit fields
   document.getElementById(`player1Guess`).value = ``
   document.getElementById(`player2Guess`).value = ``
 }
-
-function resetGame(){
-  console.log(`reset!`)
+function resetGame() {
   axios({
     method: `POST`,
     url: `/reset`,
-    data: ``
-  }).then((response) =>{
+    data: { minNum: minNum, maxNum: maxNum }
+  }).then((response) => {
     roundTracker = 1
     let player1History = document.getElementById(`player1History`)
     let player2History = document.getElementById(`player2History`)
     player1History.innerHTML = ``
     player2History.innerHTML = ``
+    document.getElementById(`winnerText`).innerHTML = ``
     document.getElementById(`roundTracker`).innerText = roundTracker
   })
 }
+function newGameSettings(event) {
+  event.preventDefault()
+  let player1Name = document.getElementById(`player1Name`).value
+  let player2Name = document.getElementById(`player2Name`).value
+  robotCheck = document.getElementById(`robotCheck`).checked
+  minNum = Number(document.getElementById(`minimumNum`).value)
+  maxNum = Number(document.getElementById(`maximumNum`).value)
+  let postObj = { minNum: minNum, maxNum: maxNum, robot: robotCheck }
+  axios({
+    method: `POST`,
+    url: `/newgame`,
+    data: postObj
+  }).then((response) => {
+    let body = document.querySelector(`body`)
+    if (robotCheck === false) {
+      body.innerHTML = `
+    <h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
+     <span class="players">
+    <div id="player1">
+      <h3>${player1Name}</h3>
+     <input type="number" id="player1Guess" placeholder="Guess Here!">
+     <table>
+    <tbody id="player1History">
+    </tbody>
+  </table>
 
+</div>
 
-onReady()
+<div id="player2">
+  <h3>${player2Name}</h3>
+  <input type="number" id="player2Guess" placeholder="Guess Here!">
+  <table>
+    <tbody id="player2History">
+    </tbody>
+  </table>
+
+</div>
+</span>
+
+<div id="winnerText">
+
+</div>
+<span class="submitArea">
+<button onClick="submitGuesses(event)">Submit Guesses!</button>
+<p>Current Round:<span id="roundTracker">1</span></p>
+</span>
+      `}
+    else if (robotCheck === true) {
+      body.innerHTML = `
+    <h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
+     <span class="players">
+    <div id="player1">
+      <h3>${player1Name}</h3>
+     <input type="number" id="player1Guess" placeholder="Guess Here!">
+     <table>
+    <tbody id="player1History">
+    </tbody>
+        </table>
+
+    </div>
+
+    <div id="player2">
+  <h3>${player2Name}</h3>
+  <input type="number" id="player2Guess" placeholder="Guess Here!">
+  <table>
+    <tbody id="player2History">
+    </tbody>
+  </table>
+</div>
+<div id="playerComputer">
+      <h3>The Computer</h3>
+     <table>
+    <tbody id="playerComputerHistory">
+    </tbody>
+</span>
+
+<div id="winnerText">
+
+</div>
+<span class="submitArea">
+<button onClick="submitGuesses(event)">Submit Guesses!</button>
+<p>Current Round:<span id="roundTracker">1</span></p>
+</span>`
+    }
+  })
+}
+function toNewGame() {
+  roundTracker = 1
+  document.querySelector(`body`).innerHTML =
+    `<h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
+  <form class="newGameForm">
+    <p>Player 1 Name</p>
+    <input type="text" placeholder="Player 1 Name" id="player1Name">
+    <p>Player 2 Name</p>
+    <input type="text" placeholder="Player 2 Name" id="player2Name">
+    <p>Minimum Number</p>
+    <input type="number" placeholder="Min. #" id="minimumNum">
+    <p>Maximum Number</p>
+    <input type="number" placeholder="Max. #" id="maximumNum">
+    <input type="checkbox" id="robotCheck">
+      <label for="robotCheck">Have an AI Opponent?</label>
+    <button onClick="newGameSettings(event)">Submit</button>
+     </form>`
+}

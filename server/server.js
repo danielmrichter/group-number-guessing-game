@@ -3,7 +3,11 @@ const bodyParser = require('body-parser')
 const app = express();
 const PORT = 5000;
 app.use(express.json())
-let correctNumber = getRandomArbitrary(1, 25)
+const randomNumberGenerator = module.require(`./randomnumber.js`)
+let correctNumber
+let robotCheck = false
+let minNum
+let maxNum
 let guessesArray = [
   // Know what their guess was
   // know who guessed it
@@ -29,38 +33,41 @@ app.use(express.static('server/public'));
 
 // GET & POST Routes go here
 
-// req = [{
-//  guesser: player#
-//  number: #},
-// {}]
-
-
 app.post(`/guesses`, (req, res) => {
-  for(let guess of req.body){
+  let guessesToCheck = req.body
+  if(robotCheck === true){
+    let robotGuess = randomNumberGenerator(minNum,maxNum)
+    guessesToCheck.push({guesser: `robot`, number:robotGuess})
+  }
+  for(let guess of guessesToCheck){
     checkGuesses(guess)
-    // check the return i guess or something
   }
   res.status(201).send(guessesArray)
 })
 app.post(`/reset`, (req, res) => {
   guessesArray = []
-  console.log(`guessesArray is now:`, guessesArray)
+  minNum = req.body.minNum
+  maxNum = req.body.maxNum
+  correctNumber = randomNumberGenerator(minNum,maxNum)
+  console.log(correctNumber)
   res.sendStatus(201)
 })
-// app.get('/guesses', (req, res) => {
-//   res.send(guessesArray)
-// })
 
+app.post(`/newgame`, (req, res) => {
+  minNum = req.body.minNum
+  maxNum = req.body.maxNum
+  guessesArray = []
+  correctNumber = randomNumberGenerator(minNum, maxNum)
+  console.log(correctNumber)
+  if(req.body.robot){
+    robotCheck = true
+  } else{
+    robotCheck = false
+  }
+  console.log(`robotCheck is ${robotCheck}`)
+  res.sendStatus(201)
+})
 
 app.listen(PORT, () => {
   console.log ('Server is running on port', PORT)
 })
-
-
-// from the MDN Wiki 
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomArbitrary(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
-}
-
-console.log(correctNumber)

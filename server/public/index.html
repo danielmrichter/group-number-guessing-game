@@ -12,35 +12,19 @@
 </head>
 <body>
     <h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
-    <span class="players">
-<div id="player1">
-  <h3>Player 1</h3>
-  <input type="number" id="player1Guess" placeholder="Guess Here!">
-  <table>
-    <tbody id="player1History">
-    </tbody>
-  </table>
-
-</div>
-
-<div id="player2">
-  <h3>Player 2</h3>
-  <input type="number" id="player2Guess" placeholder="Guess Here!">
-  <table>
-    <tbody id="player2History">
-    </tbody>
-  </table>
-
-</div>
-</span>
-
-<div id="winnerText">
-
-</div>
-<span class="submitArea">
-<button onClick="submitGuesses(event)">Submit Guesses!</button>
-<p>Current Round:<span id="roundTracker">1</span></p>
-</span>
+    <form class="newGameForm">
+      <p>Player 1 Name</p>
+      <input type="text" placeholder="Player 1 Name" id="player1Name">
+      <p>Player 2 Name</p>
+      <input type="text" placeholder="Player 2 Name" id="player2Name">
+      <p>Minimum Number</p>
+      <input type="number" placeholder="Min. #" id="minimumNum">
+      <p>Maximum Number</p>
+      <input type="number" placeholder="Max. #" id="maximumNum">
+      <label for="robotCheck">Have an AI Opponent?</label>
+      <input type="checkbox" id="robotCheck">
+      <button onClick="newGameSettings(event)">Submit</button>
+    </form>
 </body>
 </html>
 
