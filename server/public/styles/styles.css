@@ -48,7 +48,7 @@ h1{
     background-image: url(https://media0.giphy.com/media/8desOxQqrretyGGfFI/200w.gif?cid=6c09b952vdna4f7fepupp8macb5bc7dvgamxjf22oev0c0hv&ep=v1_videos_search&rid=200w.gif&ct=v);
     color:red;
     height:200px;
-    animation: blinker 1s linear infinite;
+    animation: blinker 1.5s linear infinite;
 }
 @keyframes blinker {
     75% {

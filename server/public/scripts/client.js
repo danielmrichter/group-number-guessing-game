@@ -56,7 +56,7 @@ function getResults(guessesArray) {
     if (guess.guesser === 1) {
       player1History.innerHTML += `
         <tr>
-          <td>${guess.number}</td>
+          <td><b>${guess.number}</b></td>
           <td>${guess.result}</td>
         </tr>
        `
@@ -67,7 +67,7 @@ function getResults(guessesArray) {
       player2History.innerHTML +=
         `
         <tr>
-          <td>${guess.number}</td>
+          <td><b>${guess.number}</b></td>
           <td>${guess.result}</td>
        </tr>
        `
@@ -78,7 +78,7 @@ function getResults(guessesArray) {
       playerComputerHistory.innerHTML +=
       `
       <tr>
-        <td>${guess.number}</td>
+        <td><b>${guess.number}</b></td>
         <td>${guess.result}</td>
      </tr>
      ` 
