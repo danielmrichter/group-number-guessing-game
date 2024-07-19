@@ -195,38 +195,38 @@ function newGameSettings(event) {
       `}
     else if (robotCheck === true) {
       body.innerHTML = `
-    <h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
-     <span class="players">
+<h1>THE ULTIMATE GAME OF GUESSING NUMBERS</h1>
+<main class="players">
     <div id="player1">
-      <h3>${player1Name}</h3>
-     <input type="number" id="player1Guess" placeholder="Guess Here!">
-     <table>
-    <tbody id="player1History">
-    </tbody>
+        <h3>${player1Name}</h3>
+        <input type="number" id="player1Guess" placeholder="Guess Here!">
+        <table>
+            <tbody id="player1History">
+            </tbody>
         </table>
-
     </div>
 
     <div id="player2">
-  <h3>${player2Name}</h3>
-  <input type="number" id="player2Guess" placeholder="Guess Here!">
-  <table>
-    <tbody id="player2History">
-    </tbody>
-  </table>
-</div>
-<div id="playerComputer">
-      <h3>The Computer</h3>
-     <table>
-    <tbody id="playerComputerHistory">
-    </tbody>
-</span>
-
+        <h3>${player2Name}</h3>
+        <input type="number" id="player2Guess" placeholder="Guess Here!">
+        <table>
+            <tbody id="player2History">
+            </tbody>
+        </table>
+    </div>
+    <div id="playerComputer">
+        <h3>The Computer</h3>
+        <table>
+            <tbody id="playerComputerHistory">
+            </tbody>
+        </table>
+    </div>
+</main>
 <div id="winnerText">
 </div>
 <span class="submitArea">
-<button onClick="submitGuesses(event)">Submit Guesses!</button>
-<p>Current Round:<span id="roundTracker">1</span></p>
+    <button onClick="submitGuesses(event)">Submit Guesses!</button>
+    <p>Current Round:<span id="roundTracker">1</span></p>
 </span>`
     }
   })
