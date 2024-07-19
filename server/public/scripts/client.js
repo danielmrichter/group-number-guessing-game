@@ -2,6 +2,8 @@ let roundTracker = 1
 let minNum
 let maxNum
 let robotCheck = false
+let player1Name
+let player2Name
 function submitGuesses(event) {
   // bundle up data
   let player1Guess = document.getElementById(`player1Guess`).value
@@ -51,7 +53,6 @@ function getResults(guessesArray) {
     document.getElementById(`playerComputerHistory`).innerHTML = ``
   }
   for (let guess of guessesArray) {
-    console.log(guess)
     if (guess.guesser === 1) {
       player1History.innerHTML += `
         <tr>
@@ -88,29 +89,37 @@ function getResults(guessesArray) {
   }
   if (computerCorrect === true &&(player1Correct === true || player2Correct === true)) {
     //declare a tie
-    console.log(`computerCorrect is true: `, computerCorrect)
-    winnerText.innerHTML = `<p>We got a tie with the computer!</p>
+    winnerText.innerHTML = `<div class="tieWithComputer"><p>We got a tie with the computer!</p>
       <button onClick="resetGame()">Play Again (Same Settings)</button>
-      <button onClick="toNewGame()">New Game</button>
+      <button onClick="toNewGame()">New Game</button></div>
       `
+        document.getElementById(`player1Guess`).value = ``
+        document.getElementById(`player2Guess`).value = ``
     return
   }
   else if (player1Correct === true) {
-    winnerText.innerHTML = `<p>Player 1 Wins!</p>
+    winnerText.innerHTML = `<div class="winner"><p>${player1Name} Wins!</p>
       <button onClick="resetGame()">Play Again (Same Settings)</button>
-      <button onClick="toNewGame()">New Game</button>`
+      <button onClick="toNewGame()">New Game</button></div>`
+        document.getElementById(`player1Guess`).value = ``
+        document.getElementById(`player2Guess`).value = ``
     return
   } else if (player2Correct === true) {
     //player 2 wins
-    winnerText.innerHTML = `<p>Player 2 Wins!</p>
+    winnerText.innerHTML = `<div class="winner"><p>${player2Name} Wins!</p>
       <button onClick="resetGame()">Play Again(Same Settings)</button>
-      <button onClick="toNewGame()">New Game</button>`
+      <button onClick="toNewGame()">New Game</button></div>`
+        document.getElementById(`player1Guess`).value = ``
+        document.getElementById(`player2Guess`).value = ``
     return
   } else if (computerCorrect === true){
-    winnerText.innerHTML = `<p>You lost to the Computer! 🤖🤖🤖 </p>
+    winnerText.innerHTML = `<div class="computerWins"><p>You lost to the Computer! 🤖🤖🤖 </p>
     <p>Now that's just embarassing...</p>
       <button onClick="resetGame()">Play Again(Same Settings)</button>
-      <button onClick="toNewGame()">New Game</button>`
+      <button onClick="toNewGame()">New Game</button></div>`
+        document.getElementById(`player1Guess`).value = ``
+        document.getElementById(`player2Guess`).value = ``
+      return
   }
   // advance round tracker
   roundTracker++
@@ -136,8 +145,8 @@ function resetGame() {
 }
 function newGameSettings(event) {
   event.preventDefault()
-  let player1Name = document.getElementById(`player1Name`).value
-  let player2Name = document.getElementById(`player2Name`).value
+  player1Name = document.getElementById(`player1Name`).value
+  player2Name = document.getElementById(`player2Name`).value
   robotCheck = document.getElementById(`robotCheck`).checked
   minNum = Number(document.getElementById(`minimumNum`).value)
   maxNum = Number(document.getElementById(`maximumNum`).value)
@@ -211,7 +220,6 @@ function newGameSettings(event) {
 </span>
 
 <div id="winnerText">
-
 </div>
 <span class="submitArea">
 <button onClick="submitGuesses(event)">Submit Guesses!</button>

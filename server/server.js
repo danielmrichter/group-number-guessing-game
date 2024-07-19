@@ -64,7 +64,6 @@ app.post(`/newgame`, (req, res) => {
   } else{
     robotCheck = false
   }
-  console.log(`robotCheck is ${robotCheck}`)
   res.sendStatus(201)
 })
 

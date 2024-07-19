@@ -39,3 +39,36 @@ h1{
     align-items: center;
     justify-content: space-around;    
 }
+.winner{
+    background-image: url(https://media0.giphy.com/media/xT77XWum9yH7zNkFW0/200w.gif?cid=6c09b9525ay52wesmwnrixp4l3wvtkf7dri7kzlmx0fllbsh&ep=v1_gifs_search&rid=200w.gif&ct=g);
+    height: 214px;
+    font-size: 3rem;
+  letter-spacing: 0.15rem;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: -4px 4px #ef3550,
+               -8px 8px #f48fb1,
+               -12px 12px #7e57c2,
+               -16px 16px #2196f3,
+               -20px 20px #26c6da,
+               -24px 24px #43a047,
+               -28px 28px #eeff41,
+               -32px 32px #f9a825,
+               -36px 36px #ff5722;
+}
+.computerWins{
+    background-image: url(https://media0.giphy.com/media/8desOxQqrretyGGfFI/200w.gif?cid=6c09b952vdna4f7fepupp8macb5bc7dvgamxjf22oev0c0hv&ep=v1_videos_search&rid=200w.gif&ct=v);
+    color:red;
+    height:200px;
+    animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+    75% {
+      opacity: 0;
+    }
+  }
+.tieWithComputer{
+    background-image: url(https://gifdb.com/images/high/panda-office-pc-rage-w8js1h9jzodiag5i.gif);
+    color:red;
+    height: 500px
+}
