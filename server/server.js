@@ -35,8 +35,19 @@ app.use(express.static('server/public'));
 
 app.post(`/guesses`, (req, res) => {
   let guessesToCheck = req.body
+  let robotMin = minNum
+  let robotMax = maxNum
   if(robotCheck === true){
-    let robotGuess = randomNumberGenerator(minNum,maxNum)
+    for(let robotGuess of guessesArray){
+      if(robotGuess.guesser = `robot` && robotGuess.result === `Too low`){
+        if(robotGuess.number > robotMin)
+          robotMin = robotGuess.number
+      }else if(robotGuess.guesser = `robot` && robotGuess.result === `Too high`){
+        if(robotGuess.number < robotMax)
+          robotMax = robotGuess.number
+      }
+    }
+    let robotGuess = randomNumberGenerator(robotMin,robotMax)
     guessesToCheck.push({guesser: `robot`, number:robotGuess})
   }
   for(let guess of guessesToCheck){
@@ -52,7 +63,6 @@ app.post(`/reset`, (req, res) => {
   console.log(correctNumber)
   res.sendStatus(201)
 })
-
 app.post(`/newgame`, (req, res) => {
   minNum = req.body.minNum
   maxNum = req.body.maxNum
@@ -66,7 +76,6 @@ app.post(`/newgame`, (req, res) => {
   }
   res.sendStatus(201)
 })
-
 app.listen(PORT, () => {
   console.log ('Server is running on port', PORT)
 })

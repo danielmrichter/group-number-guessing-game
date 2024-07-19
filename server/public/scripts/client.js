@@ -19,7 +19,7 @@ function submitGuesses(event) {
   let guessesToSubmit = [
     {
       guesser: 1,
-      number: Number(player1Guess)
+      number: Number(player1Guess),
     },
     {
       guesser: 2,
@@ -139,6 +139,9 @@ function resetGame() {
     let player2History = document.getElementById(`player2History`)
     player1History.innerHTML = ``
     player2History.innerHTML = ``
+    if(robotCheck){
+      document.getElementById(`playerComputerHistory`).innerHTML=``
+    }
     document.getElementById(`winnerText`).innerHTML = ``
     document.getElementById(`roundTracker`).innerText = roundTracker
   })
